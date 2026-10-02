@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mengenal Dunia EPC (Engineering, Procurement, Construction) - PT PP</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Canvas Confetti for Celebration -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Google Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <script>
+    /* USER EXACT COLOR PALETTE SYSTEM:
+       1. Dark Canvas / Deep Ink: #222428 (RGB 34 36 40) - 30%
+       2. Electric Blue Primary: #005eff (RGB 0 94 255) - Brand / Main Accent
+       3. Vivid Sky Blue Secondary: #3f86ff (RGB 63 134 255) - Active / Hover Accent
+       4. Soft Pastel Ice Blue: #bcd6ff (RGB 188 214 255) - Pill / Light Tint / Borders
+       5. Crisp Pure White: #ffffff (RGB 255 255 255) - Card / Surface 60%
+       * Navigasi & Safety UI: Hijau (emerald/success) & Merah (rose/error) tetap dipertahankan.
+    */
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          colors: {
+            cBase: '#f4f8ff',        // Ultra-light tint of ice blue for eye comfort
+            cDark: '#222428',        // Exact Palette 1 (RGB 34 36 40)
+            cDarkCard: '#1a1c20',
+            cBrand: '#005eff',       // Exact Palette 2 (RGB 0 94 255)
+            cBrandHover: '#004cd6',
+            cBrandLight: '#bcd6ff',  // Exact Palette 4 (RGB 188 214 255)
+            cBrandSoft: '#eef5ff',
+            cAccent: '#3f86ff',      // Exact Palette 3 (RGB 63 134 255)
+            cAccentHover: '#005eff',
+            cAccentLight: '#bcd6ff',
+            cLine: '#dbe7fb',        // Soft pastel border
+            cMuted: '#525a66'
+          },
+          boxShadow: {
+            card: '0 4px 20px -2px rgba(0, 94, 255, 0.06), 0 2px 8px -2px rgba(34, 36, 40, 0.04)',
+            lift: '0 12px 28px -4px rgba(0, 94, 255, 0.2), 0 6px 14px -4px rgba(0, 94, 255, 0.12)'
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #F1F5F9; }
+    ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #0284C7; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-enter {
+      animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* 3D Flip Card Styles */
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+
+    /* Character Video & Animation Styling */
+    .character-video-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      background: #0F172A;
+    }
+    .character-video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: #FFFFFF !important; overflow: visible !important; height: auto !important; }
+      #appScrollContainer { overflow: visible !important; height: auto !important; }
+      .print-only { display: block !important; }
+    }
+  </style>
+</head>
+<body class="bg-cBase text-cDark antialiased h-screen overflow-hidden flex flex-col font-sans selection:bg-cBrand selection:text-white">
+
+  <!-- Audio Narration Element -->
+  <audio id="narratorAudio" preload="auto"></audio>
+
+  <!-- ========================================== -->
+  <!-- 1. FIXED TOP APP BAR (Never Scrolls Away)  -->
+  <!-- ========================================== -->
+  <header class="no-print h-16 shrink-0 bg-cDark text-white border-b border-white/10 shadow-md z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between gap-4">
+      
+      <!-- Brand & Module Title -->
+      <div class="flex items-center gap-3 min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-cBrand flex items-center justify-center text-white font-mono font-extrabold text-sm shadow-sm border border-cBrandLight/30 shrink-0">
+          PP
+        </div>
+        <div class="truncate">
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-cAccent text-white font-mono">Modul EPC 10 Slide</span>
+            <span class="text-xs text-cBrandLight/80 hidden sm:inline">Engineering · Procurement · Construction</span>
+          </div>
+          <h1 class="text-xs sm:text-sm font-extrabold text-white leading-tight truncate mt-0.5">
+            Mengenal Dunia EPC Bersama Engineer Rian
+          </h1>
+        </div>
+      </div>
+
+      <!-- Controls: Audio, Progress, Mobile Toggle -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        
+        <!-- Audio Narration Controls -->
+        <div class="flex items-center bg-white/10 rounded-xl p-1 border border-white/15">
+          <button id="toggleAudioBtn" type="button" class="h-8 flex items-center gap-1.5 px-3 rounded-lg bg-white/10 hover:bg-white/20 text-white shadow-sm transition-all" title="Nyalakan/Matikan Narasi">
+            <span id="audioIconContainer" class="w-4 h-4 flex items-center justify-center text-cBrandLight">
+              <span class="material-symbols-outlined text-base">volume_off</span>
+            </span>
+            <span id="audioStatusText" class="hidden md:inline text-[11px] font-bold text-white/90">Narasi: Mati</span>
+          </button>
+          
+          <button id="replayAudioBtn" type="button" class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 text-white/80 transition-all ml-1" title="Putar Ulang Narasi">
+            <span class="material-symbols-outlined text-base">replay</span>
+          </button>
+
+          <button id="audioSpeedBtn" type="button" class="h-8 px-2 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-mono font-bold text-white transition-all ml-1" title="Kecepatan Audio">
+            1.0x
+          </button>
+        </div>
+
+        <!-- Overall Progress Bar -->
+        <div class="hidden lg:flex flex-col items-end gap-1">
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] uppercase font-bold text-white/50 font-mono">Progress</span>
+            <span id="overallProgressText" class="text-xs font-mono font-bold text-cAccentLight">0%</span>
+          </div>
+          <div class="w-28 h-2 bg-white/15 rounded-full overflow-hidden border border-white/20">
+            <div id="overallProgressBar" class="h-full bg-cAccent rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Mobile Drawer Toggle Button -->
+        <button id="mobileMenuBtn" type="button" class="lg:hidden p-2 rounded-xl bg-white/10 border border-white/15 text-white hover:bg-white/20 transition-all" title="Buka Silabus">
+          <span class="material-symbols-outlined text-lg">menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobileDrawer" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden lg:hidden">
+    <div class="fixed inset-y-0 right-0 max-w-xs w-full bg-white shadow-2xl p-5 flex flex-col justify-between overflow-y-auto">
+      <div>
+        <div class="flex items-center justify-between pb-3 border-b border-cLine mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-cBrand"></span>
+            <h2 class="text-xs font-extrabold uppercase tracking-wider text-cDark">10 Slide EPC Map</h2>
+          </div>
+          <button id="closeDrawerBtn" type="button" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100">
+            <span class="material-symbols-outlined text-lg">close</span>
+          </button>
+        </div>
+        <nav id="mobileNav" class="space-y-1.5"></nav>
+      </div>
+      <div class="pt-4 border-t border-cLine text-center text-[11px] text-cMuted font-mono">
+        PT PP (Persero) Tbk · EPC Learning System
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 2. FIXED MIDDLE WORKSPACE (Sidebar Fixed & Content Scroll)     -->
+  <!-- ============================================================== -->
+  <div class="flex-1 overflow-hidden w-full">
+    <div class="max-w-7xl h-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
+      <div class="flex flex-col lg:flex-row gap-6 h-full items-start">
+
+        <!-- Fixed Desktop Sidebar Navigation (Fixed Viewport, Scrollable if Content Long) -->
+        <aside class="no-print hidden lg:block w-72 xl:w-80 shrink-0 h-full overflow-y-auto space-y-4 pr-1">
+          
+          <!-- Companion Avatar Card with Live Character Loop Video -->
+          <div class="bg-cDark rounded-2xl border border-cBrand/30 p-4 text-white shadow-card relative overflow-hidden">
+            <div class="flex items-center gap-3">
+              <div class="relative w-16 h-16 rounded-xl bg-cDarkCard border border-cBrand/40 overflow-hidden shrink-0 flex items-center justify-center shadow-inner">
+                <!-- Video Loop Companion -->
+                <video id="sidebarCompanionVideo" autoplay loop muted playsinline class="w-full h-full object-cover object-top">
+                  <source src="assets/rian_walk_loop.mp4" type="video/mp4" />
+                  <img src="assets/rian_engineer.png" alt="Rian Site Engineer" class="w-full h-full object-cover object-top" />
+                </video>
+                <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-cDark" title="Aktif Menemani"></span>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-cBrand/30 text-cBrandLight border border-cBrand/40">Companion</span>
+                </div>
+                <h2 class="text-sm font-extrabold text-white mt-1">Rian, ST.</h2>
+                <p id="sidebarCompanionSubtitle" class="text-[11px] text-cBrandLight/80 truncate">Site Engineer PT PP</p>
+              </div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-300">
+              <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-cBrandLight text-sm">hard_drive</span> Status Proyek:
+              </span>
+              <span id="sidebarStatusText" class="font-bold text-cBrandLight">On Track</span>
+            </div>
+          </div>
+
+          <!-- 10-Slide Navigation Menu -->
+          <div class="bg-white rounded-2xl border border-cLine shadow-card p-4">
+            <div class="flex items-center justify-between pb-3 border-b border-cLine mb-3">
+              <span class="text-[11px] font-mono font-bold text-cBrand uppercase tracking-wider">Silabus 10 Slide</span>
+              <span class="text-[10px] font-mono text-cMuted">Langkah Terstruktur</span>
+            </div>
+            <nav id="desktopNav" class="space-y-1.5"></nav>
+          </div>
+
+          <!-- Course Meta Card -->
+          <div class="bg-white rounded-2xl border border-cLine shadow-card p-4 text-xs text-cMuted space-y-2">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-cDark">Beban Belajar:</span>
+              <span class="font-mono text-cBrand font-semibold">10 Unit (~25 Menit)</span>
+            </div>
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-cDark">Passing Grade Kuis:</span>
+              <span class="font-mono text-cAccent font-bold">&ge; 80% (Min. 4 Benar)</span>
+            </div>
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="font-bold text-cDark">Sertifikasi:</span>
+              <span class="font-medium text-emerald-700 flex items-center gap-1 font-semibold">
+                <span class="material-symbols-outlined text-sm">verified</span> E-Certificate
+              </span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Dynamic Main Slide Content Area (Independent Scroll Container) -->
+        <section id="appScrollContainer" class="flex-1 w-full h-full overflow-y-auto space-y-6 pr-1">
+          <div id="unitContainer" class="min-h-[550px]">
+            <!-- Dynamic Units Rendered via JS -->
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- 3. FIXED BOTTOM NAVIGATION BAR & ACTIONS (Never Scrolls Away)  -->
+  <!-- ============================================================== -->
+  <div class="no-print bg-white border-t border-cLine shadow-lg shrink-0 z-40 py-3 sm:py-3.5 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      
+      <button id="prevBtn" type="button" class="w-full sm:w-auto px-5 py-2 rounded-xl border border-cLine bg-white text-cDark font-bold text-xs hover:bg-slate-50 transition flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-base">arrow_back</span>
+        <span>Slide Sebelumnya</span>
+      </button>
+
+      <!-- Gate Timer Display -->
+      <div id="timerContainer" class="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-cBase border border-cLine text-xs font-mono">
+        <span class="material-symbols-outlined text-sm text-cBrand">timer</span>
+        <span id="timerText" class="text-cDark font-semibold">Waktu membaca: 10s</span>
+      </div>
+
+      <button id="nextBtn" type="button" class="w-full sm:w-auto px-6 py-2 rounded-xl bg-cBrand hover:bg-cBrandHover text-white font-extrabold text-xs shadow-md transition flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+        <span id="nextBtnText">Lanjut ke Slide Berikutnya</span>
+        <span class="material-symbols-outlined text-base">arrow_forward</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-20 right-6 bg-cDark text-white text-xs px-4 py-3 rounded-2xl shadow-2xl transform translate-y-24 opacity-0 transition duration-300 pointer-events-none z-50 flex items-center gap-3 border border-white/15">
+    <span id="toastIcon" class="material-symbols-outlined text-emerald-400 text-lg">check_circle</span>
+    <span id="toastMsg" class="font-medium">Pemberitahuan</span>
+  </div>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    /* =========================================================
+       1. IMMUTABLE COURSE CONFIGURATION (Zero-Backdoor)
+       ========================================================= */
+    const COURSE_CONFIG = {
+      devMode: false,          // Toggle strictly for author testing
+      enableGatingTimer: true,
+      passingScore: 80,
+      totalUnits: 11           // 0 to 10
+    };
+
+    /* =========================================================
+       2. LIGHTWEIGHT MARKDOWN RENDERING ENGINE (Zero Raw Markdown)
+       ========================================================= */
+    function renderMarkdown(str) {
+      if (!str) return '';
+      let res = str;
+      // Bold: **text** -> <strong>text</strong>
+      res = res.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-cDark">$1</strong>');
+      // Italic: *text* -> <em>text</em>
+      res = res.replace(/\*([^\*]+)\*/g, '<em class="italic">$1</em>');
+      // Inline code: `code` -> <code>code</code>
+      res = res.replace(/`([^`]+)`/g, '<code class="font-mono text-xs px-1.5 py-0.5 rounded bg-slate-100 text-cBrand border border-cLine">$1</code>');
+      return res;
+    }
+
+    /* =========================================================
+       3. WEB AUDIO API SYNTHESIZER (Tactile Sound FX)
+       ========================================================= */
+    const SoundFX = {
+      ctx: null,
+      init: function() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+      playTone: function(freq, type = 'sine', duration = 0.12, gainLevel = 0.15) {
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(gainLevel, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e) {}
+      },
+      click: function() { this.playTone(480, 'sine', 0.08, 0.12); },
+      toggle: function() { this.playTone(620, 'triangle', 0.1, 0.14); },
+      success: function() {
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const now = this.ctx.currentTime;
+          [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(f, now + i * 0.08);
+            gain.gain.setValueAtTime(0.12, now + i * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.25);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + i * 0.08);
+            osc.stop(now + i * 0.08 + 0.25);
+          });
+        } catch(e) {}
+      },
+      error: function() {
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const now = this.ctx.currentTime;
+          [280, 220].forEach((f, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(f, now + i * 0.1);
+            gain.gain.setValueAtTime(0.12, now + i * 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.2);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + i * 0.1);
+            osc.stop(now + i * 0.1 + 0.2);
+          });
+        } catch(e) {}
+      }
+    };
+
+    /* =========================================================
+       4. COURSE UNITS METADATA (10 SLIDES & VIDEO MAPPING)
+       ========================================================= */
+    const UNITS_METADATA = [
+      { id: 0, title: "0. Welcome & Briefing", short: "Briefing", minSeconds: 10, video: "assets/rian_wave_loop.mp4", subtitle: "Menyambut Rekan Insan Pembangun" },
+      { id: 1, title: "1. Mengapa Harus EPC?", short: "Tantangan", minSeconds: 12, video: "assets/rian_walk_loop.mp4", subtitle: "Menganalisis Tantangan Proyek" },
+      { id: 2, title: "2. EPC vs Tradisional", short: "Model Kontrak", minSeconds: 14, video: "assets/rian_tablet_loop.mp4", subtitle: "Membedah Skema Kontrak Turnkey" },
+      { id: 3, title: "3. Pilar E: Engineering", short: "Engineering", minSeconds: 15, video: "assets/rian_tablet_loop.mp4", subtitle: "Memeriksa Cetak Biru & 3D BIM" },
+      { id: 4, title: "4. Pilar P: Procurement", short: "Procurement", minSeconds: 15, video: "assets/rian_tablet_loop.mp4", subtitle: "Mengawal Rantai Pasok Long Lead Items" },
+      { id: 5, title: "5. Pilar C: Construction", short: "Construction", minSeconds: 14, video: "assets/rian_walk_loop.mp4", subtitle: "Inspeksi Lapangan & Ereksi Struktur" },
+      { id: 6, title: "6. K3 & Safety Inspection", short: "HSE Culture", minSeconds: 14, video: "assets/rian_thumbs_loop.mp4", subtitle: "Audit Budaya Zero Harm" },
+      { id: 7, title: "7. Commissioning & COD", short: "Commissioning", minSeconds: 14, video: "assets/rian_walk_loop.mp4", subtitle: "Uji Fungsi Menuju Handover" },
+      { id: 8, title: "8. Simulasi Mitigasi Risiko", short: "Studi Kasus", minSeconds: 15, video: "assets/rian_tablet_loop.mp4", subtitle: "Command Center Pemecahan Masalah" },
+      { id: 9, title: "9. Evaluasi Akhir (Post-Test)", short: "Evaluasi Akhir", minSeconds: 5, video: "assets/rian_tablet_loop.mp4", subtitle: "Uji Evaluasi Kompetensi Mandiri" },
+      { id: 10, title: "10. Kelulusan & Sertifikat", short: "Sertifikat", minSeconds: 0, video: "assets/rian_thumbs_loop.mp4", subtitle: "Selamat Atas Kelulusan Anda!" }
+    ];
+
+    /* =========================================================
+       5. QUIZ QUESTIONS & CRYPTO HASH ENGINE (SHA-256)
+       ========================================================= */
+    const QUIZ_QUESTIONS = [
+      {
+        q: "Apa karakteristik utama yang membedakan kontrak EPC dibandingkan model konstruksi tradisional (Design-Bid-Build)?",
+        options: [
+          "Pemilik proyek menanggung seluruh risiko kenaikan harga material di pasar.",
+          "Kontraktor memegang Single Point of Responsibility dari desain awal, pengadaan, hingga fasilitas siap pakai (Turnkey).",
+          "Klien harus merekrut konsultan perencana dan pengawas secara terpisah dari pelaksana.",
+          "Kontrak EPC hanya menangani pekerjaan fisik sipil tanpa pengadaan mesin industri."
+        ],
+        correctHash: "f4479900622a0921a244d57125c7cb859f60145cfbefd152d0981f5988799bf7",
+        explanation: "Benar! Pada kontrak EPC, kontraktor bertindak sebagai penanggung jawab tunggal (Single Point of Responsibility) dengan konsep Turnkey, menjamin performa fasilitas siap beroperasi."
+      },
+      {
+        q: "Dalam pilar Engineering, apa tujuan mendasar dari pembuatan Detail Engineering Design (DED)?",
+        options: [
+          "Sebagai dokumen formalitas izin tender tanpa ukuran teknis pasti.",
+          "Menghasilkan gambar kerja presisi milimeter (P&ID, sipil, mekanikal, kabel) untuk acuan langsung fabrikasi dan ereksi lapangan.",
+          "Hanya untuk memperkirakan studi kelayakan ekonomi awal sebelum tender dimulai.",
+          "Menentukan harga sewa alat berat di site proyek secara harian."
+        ],
+        correctHash: "3e73fd4251bad084d6573cb1d0c6081d7b3f74374a22c55efa0b8c88a77bca0e",
+        explanation: "Tepat! DED adalah cetak biru teknis detail lintas disiplin yang menjadi pedoman mutlak tim pengadaan dan tim konstruksi di lapangan."
+      },
+      {
+        q: "Komponen manakah di bawah ini yang diklasifikasikan sebagai 'Long Lead Items' (LLI) dalam proyek EPC?",
+        options: [
+          "Pasir, semen mortar, dan batu split lokal.",
+          "Kabel instalasi penerangan gedung kantor proyek.",
+          "Turbin Gas 150MW atau Boiler Uap Tekanan Tinggi buatan luar negeri.",
+          "Helm proyek dan rompi keselamatan kerja harian."
+        ],
+        correctHash: "616171847309be4cbd337861c3f92f5b118b4d12cb7ce95b9c4d9d07ec02b27e",
+        explanation: "Benar! LLI adalah peralatan kritis dengan durasi pemesanan, fabrikasi khusus, dan pengiriman laut hingga 6-18 bulan yang harus dipesan paling awal."
+      },
+      {
+        q: "Apa perbedaan paling mendasar antara tahapan 'Cold Commissioning' dan 'Hot Commissioning'?",
+        options: [
+          "Cold commissioning dilakukan saat musim hujan, sedangkan hot commissioning saat musim kemarau.",
+          "Cold commissioning adalah uji individual mesin tanpa beban nyata/fluida, sedangkan hot commissioning menguji sistem terintegrasi dengan beban/energi riil.",
+          "Cold commissioning untuk proyek bendungan, hot commissioning untuk proyek jalan tol.",
+          "Cold commissioning tidak membutuhkan pengawasan tim insinyur lapangan."
+        ],
+        correctHash: "5642a8f9bd8c5e1b88cd80f61b24bcf549ab4e8e8190cedb58293125f35f46c0",
+        explanation: "Tepat sekali! Cold commissioning menguji mekanis dan elektrik tanpa media (dry test), sedangkan hot commissioning memasukkan fluida/beban riil untuk membuktikan jaminan performa."
+      },
+      {
+        q: "Kapan tanggal Commercial Operation Date (COD) secara resmi ditetapkan dalam proyek EPC?",
+        options: [
+          "Saat peletakan batu pertama (groundbreaking) proyek.",
+          "Saat seluruh material telah tiba lengkap di pelabuhan.",
+          "Saat fasilitas lulus seluruh uji jaminan kinerja (Performance Guarantee Test) dan diserahterimakan siap operasi kepada pemilik proyek.",
+          "Saat desain gambar DED selesai ditandatangani konsultan perencana."
+        ],
+        correctHash: "23bbf8ccf7423f59d2899e924cb84b9adfb042154f126f7af43231afc1b90d41",
+        explanation: "Sempurna! COD adalah tonggak sejarah resmi ketika fasilitas telah teruji penuh kinerjanya dan siap beroperasi secara komersial."
+      }
+    ];
+
+    async function sha256(str) {
+      const buffer = new TextEncoder().encode(str);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    /* =========================================================
+       6. APPLICATION STATE MANAGEMENT
+       ========================================================= */
+    const State = {
+      currentUnit: 0,
+      completedUnits: new Set([0]),
+      unitTimeRemaining: 10,
+      timerInterval: null,
+      taskSatisfied: false,
+      audioActive: false,
+      audioSpeed: 1.0,
+      quizAnswers: {},
+      quizScore: 0,
+      learnerName: "Insan Pembangun PT PP",
+
+      procurementGame: {
+        item1: null,
+        item2: null,
+        item3: null,
+        item4: null
+      },
+      safetyChecks: new Set(),
+      dilemmaChoice: null
+    };
+
+    /* =========================================================
+       7. AUDIO NARRATION ENGINE
+       ========================================================= */
+    const AudioEngine = {
+      el: null,
+      init: function() {
+        this.el = document.getElementById('narratorAudio');
+        this.el.playbackRate = State.audioSpeed;
+        this.el.onended = () => {
+          this.updateUI(false);
+        };
+      },
+      playUnit: function(unitId) {
+        if (!State.audioActive) return;
+        const path = `audio/unit_${unitId}.mp3`;
+        this.el.src = path;
+        this.el.playbackRate = State.audioSpeed;
+        this.el.play().then(() => {
+          this.updateUI(true);
+        }).catch(err => {
+          console.warn("Autoplay audio blocked by browser policy:", err);
+          this.updateUI(false);
+        });
+      },
+      stop: function() {
+        if (this.el) {
+          this.el.pause();
+          this.el.currentTime = 0;
+          this.updateUI(false);
+        }
+      },
+      replay: function() {
+        if (this.el && this.el.src) {
+          this.el.currentTime = 0;
+          this.el.play().then(() => this.updateUI(true)).catch(() => {});
+        } else {
+          this.playUnit(State.currentUnit);
+        }
+      },
+      cycleSpeed: function() {
+        const speeds = [1.0, 1.25, 1.5];
+        const nextIdx = (speeds.indexOf(State.audioSpeed) + 1) % speeds.length;
+        State.audioSpeed = speeds[nextIdx];
+        if (this.el) this.el.playbackRate = State.audioSpeed;
+        document.getElementById('audioSpeedBtn').textContent = `${State.audioSpeed}x`;
+        SoundFX.click();
+      },
+      updateUI: function(isPlaying) {
+        const iconContainer = document.getElementById('audioIconContainer');
+        const text = document.getElementById('audioStatusText');
+        if (isPlaying) {
+          iconContainer.innerHTML = '<span class="material-symbols-outlined text-base animate-pulse text-amber-300">volume_up</span>';
+          text.textContent = "Narasi: Memutar";
+        } else {
+          iconContainer.innerHTML = `<span class="material-symbols-outlined text-base">${State.audioActive ? 'volume_down' : 'volume_off'}</span>`;
+          text.textContent = State.audioActive ? "Narasi: Aktif" : "Narasi: Mati";
+        }
+      }
+    };
+
+    /* =========================================================
+       8. UI TOAST & NOTIFICATION HELPERS
+       ========================================================= */
+    function showToast(msg, icon = 'info', isError = false) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+      toastMsg.textContent = msg;
+      toastIcon.textContent = icon;
+      toastIcon.className = isError 
+        ? "material-symbols-outlined text-rose-400 text-lg" 
+        : "material-symbols-outlined text-emerald-400 text-lg";
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3200);
+    }
+
+    /* =========================================================
+       9. UNIT RENDERING TEMPLATES (Clean Markdown Parsing + Videos)
+       ========================================================= */
+    function renderUnitContent(unitId) {
+      const meta = UNITS_METADATA[unitId];
+      let html = '';
+
+      switch(unitId) {
+        case 0:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-8">
+              <!-- Hero Header with Dynamic Video Host -->
+              <div class="flex flex-col md:flex-row items-center gap-6 pb-6 border-b border-cLine">
+                <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-2xl bg-cDark border-2 border-cBrandLight/40 p-1.5 shrink-0 shadow-lift flex items-center justify-center relative overflow-hidden">
+                  <video autoplay loop muted playsinline class="w-full h-full object-cover object-top rounded-xl">
+                    <source src="assets/rian_wave_loop.mp4" type="video/mp4" />
+                    <img src="assets/rian_engineer.png" alt="Rian Site Engineer" class="w-full h-full object-cover object-top rounded-xl" />
+                  </video>
+                  <div class="absolute bottom-2 bg-cDark/90 backdrop-blur px-2.5 py-0.5 rounded text-[10px] font-mono text-cBrandLight font-bold border border-cBrand/40">
+                    Host: Rian, ST.
+                  </div>
+                </div>
+                <div class="text-center md:text-left space-y-2">
+                  <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cBrandSoft text-cBrand text-xs font-bold font-mono border border-cLine">
+                    <span class="material-symbols-outlined text-sm">engineering</span>
+                    PT PP (Persero) Tbk · Modul Interaktif
+                  </div>
+                  <h2 class="text-2xl sm:text-4xl font-extrabold text-cDark tracking-tight">
+                    Mengenal Dunia EPC <span class="text-cBrand">(Engineering, Procurement, Construction)</span>
+                  </h2>
+                  <p class="text-xs sm:text-sm text-cMuted leading-relaxed max-w-2xl">
+                    Jelajahi anatomi mega proyek bernilai triliunan rupiah bersama Site Engineer Rian. Pahami bagaimana sinergi rekayasa desain, pengadaan rantai pasok global, dan konstruksi fisik terintegrasi mewujudkan mahakarya infrastruktur kebanggaan bangsa.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Persona Voice Dialogue -->
+              <div class="bg-cBrandSoft border border-cBrandLight rounded-2xl p-5 flex items-start gap-4">
+                <span class="material-symbols-outlined text-2xl text-cBrand shrink-0 mt-0.5">record_voice_over</span>
+                <div class="space-y-1">
+                  <div class="text-xs font-extrabold text-cBrand uppercase tracking-wider font-mono">Pesan Pembuka Insinyur Rian:</div>
+                  <p class="text-xs sm:text-sm text-cDark/85 italic leading-relaxed">
+                    "Halo Rekan Insan Pembangun! Sebagai kontraktor EPC terkemuka, PT PP mengemban amanah besar di proyek-proyek strategis nasional. Di modul ini, Anda akan memegang kendali mulai dari meja gambar hingga serah terima kunci pabrik. Mari kita mulai ekspedisi 10 slide ini!"
+                  </p>
+                  <div class="pt-2">
+                    <button onclick="toggleAudioPreview()" type="button" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-cBrand text-white text-xs font-bold shadow-sm hover:bg-cBrandHover transition">
+                      <span class="material-symbols-outlined text-sm">play_circle</span>
+                      <span>Dengarkan Pengantar Audio</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3 Learning Mission Badges -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="p-4 rounded-2xl border border-cLine bg-slate-50/50 space-y-2">
+                  <div class="w-8 h-8 rounded-xl bg-cBrand text-white flex items-center justify-center font-bold text-sm">1</div>
+                  <h3 class="text-xs font-extrabold text-cDark uppercase">Turnkey Mastery</h3>
+                  <p class="text-xs text-cMuted">Pahami konsep Single Point of Responsibility dan alasan klien memilih EPC.</p>
+                </div>
+                <div class="p-4 rounded-2xl border border-cLine bg-slate-50/50 space-y-2">
+                  <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-sm">2</div>
+                  <h3 class="text-xs font-extrabold text-cDark uppercase">3 Pilar Utama (E-P-C)</h3>
+                  <p class="text-xs text-cMuted">Kupas tuntas alur DED, Long Lead Items, dan Commissioning hingga COD.</p>
+                </div>
+                <div class="p-4 rounded-2xl border border-cLine bg-slate-50/50 space-y-2">
+                  <div class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-sm">3</div>
+                  <h3 class="text-xs font-extrabold text-cDark uppercase">Risk Simulator</h3>
+                  <p class="text-xs text-cMuted">Uji insting manajemen risiko proyek lapangan pada skenario riil.</p>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 1:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-6">
+              <div class="flex items-center gap-2 text-xs font-mono font-bold text-cBrand uppercase tracking-wider">
+                <span class="material-symbols-outlined text-base">domain</span>
+                Slide 1 · The Big Picture
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-cDark">
+                Mengapa Harus EPC? Kompleksitas Mega Proyek Modern
+              </h2>
+              <p class="text-xs sm:text-sm text-cMuted leading-relaxed">
+                Membangun kilang minyak, pembangkit listrik, atau pabrik industri raksasa berbeda 180 derajat dengan membangun ruko. Ketuk 3 kartu interaktif di bawah ini untuk mengungkap tantangan kritis yang membuat sistem EPC menjadi solusi mutlak:
+              </p>
+
+              <!-- 3 Interactive Flip Cards -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+                
+                <!-- Card 1 -->
+                <div onclick="flipCard(this)" class="perspective-1000 cursor-pointer h-64 select-none">
+                  <div class="flip-inner relative w-full h-full transform-style-3d transition-transform duration-500 rounded-2xl border border-cLine shadow-sm">
+                    <!-- Front -->
+                    <div class="absolute inset-0 backface-hidden bg-white p-5 rounded-2xl flex flex-col justify-between border-t-4 border-cBrand">
+                      <div>
+                        <span class="p-2 rounded-xl bg-cBrandSoft text-cBrand inline-block mb-3">
+                          <span class="material-symbols-outlined text-xl">payments</span>
+                        </span>
+                        <h4 class="text-sm font-extrabold text-cDark">Tantangan Finansial (Capital Outlay)</h4>
+                        <p class="text-xs text-cMuted mt-2">Investasi bernilai triliunan rupiah dengan risiko bunga bank berjalan.</p>
+                      </div>
+                      <div class="text-[11px] font-mono text-cBrand font-bold flex items-center gap-1">
+                        <span>Klik untuk membalik</span>
+                        <span class="material-symbols-outlined text-sm">sync</span>
+                      </div>
+                    </div>
+                    <!-- Back -->
+                    <div class="absolute inset-0 backface-hidden rotate-y-180 bg-cDark text-white p-5 rounded-2xl flex flex-col justify-between overflow-y-auto">
+                      <div>
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-cBrandLight font-bold">Solusi EPC</span>
+                        <p class="text-xs leading-relaxed mt-2 text-slate-100">
+                          Sistem kontrak EPC menggunakan skema <strong class="font-bold text-white">Lump Sum Turnkey</strong>, mengunci plafon biaya pasti sehingga klien terlindungi dari risiko pembengkakan anggaran (<em>budget overrun</em>).
+                        </p>
+                      </div>
+                      <div class="text-[10px] text-cBrandLight font-mono">Dampak: Kepastian Finansial ✓</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div onclick="flipCard(this)" class="perspective-1000 cursor-pointer h-64 select-none">
+                  <div class="flip-inner relative w-full h-full transform-style-3d transition-transform duration-500 rounded-2xl border border-cLine shadow-sm">
+                    <!-- Front -->
+                    <div class="absolute inset-0 backface-hidden bg-white p-5 rounded-2xl flex flex-col justify-between border-t-4 border-cAccent">
+                      <div>
+                        <span class="p-2 rounded-xl bg-cBrandSoft text-cBrand inline-block mb-3">
+                          <span class="material-symbols-outlined text-xl">schedule</span>
+                        </span>
+                        <h4 class="text-sm font-extrabold text-cDark">Time to Market & Jadwal Kritis</h4>
+                        <p class="text-xs text-cMuted mt-2">Setiap hari keterlambatan berakibat denda puluhan hingga ratusan juta rupiah.</p>
+                      </div>
+                      <div class="text-[11px] font-mono text-cBrand font-bold flex items-center gap-1">
+                        <span>Klik untuk membalik</span>
+                        <span class="material-symbols-outlined text-sm">sync</span>
+                      </div>
+                    </div>
+                    <!-- Back -->
+                    <div class="absolute inset-0 backface-hidden rotate-y-180 bg-cDark text-white p-5 rounded-2xl flex flex-col justify-between overflow-y-auto">
+                      <div>
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-cBrandLight font-bold">Solusi EPC</span>
+                        <p class="text-xs leading-relaxed mt-2 text-slate-100">
+                          Memungkinkan metode <strong class="font-bold text-white">Fast-Tracking</strong>: pekerjaan pengadaan material kritis dan pembersihan lahan sudah bisa dimulai bahkan saat gambar desain detail masih diselesaikan.
+                        </p>
+                      </div>
+                      <div class="text-[10px] text-cBrandLight font-mono">Dampak: Efisiensi Waktu 30% ✓</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div onclick="flipCard(this)" class="perspective-1000 cursor-pointer h-64 select-none">
+                  <div class="flip-inner relative w-full h-full transform-style-3d transition-transform duration-500 rounded-2xl border border-cLine shadow-sm">
+                    <!-- Front -->
+                    <div class="absolute inset-0 backface-hidden bg-white p-5 rounded-2xl flex flex-col justify-between border-t-4 border-cBrand">
+                      <div>
+                        <span class="p-2 rounded-xl bg-cBrandSoft text-cBrand inline-block mb-3">
+                          <span class="material-symbols-outlined text-xl">precision_manufacturing</span>
+                        </span>
+                        <h4 class="text-sm font-extrabold text-cDark">Integrasi Teknologi Tinggi</h4>
+                        <p class="text-xs text-cMuted mt-2">Penggabungan sistem otomasi SCADA, bejana bertekanan, dan turbin canggih.</p>
+                      </div>
+                      <div class="text-[11px] font-mono text-cBrand font-bold flex items-center gap-1">
+                        <span>Klik untuk membalik</span>
+                        <span class="material-symbols-outlined text-sm">sync</span>
+                      </div>
+                    </div>
+                    <!-- Back -->
+                    <div class="absolute inset-0 backface-hidden rotate-y-180 bg-cDark text-white p-5 rounded-2xl flex flex-col justify-between overflow-y-auto">
+                      <div>
+                        <span class="text-[10px] font-mono uppercase tracking-wider text-cBrandLight font-bold">Solusi EPC</span>
+                        <p class="text-xs leading-relaxed mt-2 text-slate-100">
+                          Menjamin <strong class="font-bold text-white">Performance Guarantee</strong>: kontraktor tidak cuma menyerahkan gedung berdiri, tapi bertanggung jawab menjamin pabrik beroperasi menghasilkan output kapasitas yang dijanjikan.
+                        </p>
+                      </div>
+                      <div class="text-[10px] text-cBrandLight font-mono">Dampak: Jaminan Kinerja Total ✓</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Host Note -->
+              <div class="p-4 rounded-xl bg-cBrandSoft border border-cLine text-xs text-cMuted flex items-center gap-3">
+                <span class="material-symbols-outlined text-cBrand text-lg">info</span>
+                <span>Balik minimal 1 kartu untuk menyelesaikan interaktivitas slide ini.</span>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 2:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-6">
+              <div class="flex items-center gap-2 text-xs font-mono font-bold text-cBrand uppercase tracking-wider">
+                <span class="material-symbols-outlined text-base">contract</span>
+                Slide 2 · Model Kontrak
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-cDark">
+                EPC vs Tradisional: Single Point of Responsibility
+              </h2>
+              <p class="text-xs sm:text-sm text-cMuted leading-relaxed">
+                Perbedaan mendasar model EPC ada pada alokasi risiko dan tanggung jawab. Klik tombol toggle di bawah untuk melihat perbedaan arsitektur kontrak:
+              </p>
+
+              <!-- Interactive Tabs -->
+              <div class="flex gap-2 p-1.5 rounded-2xl bg-cBrandSoft border border-cLine max-w-md">
+                <button id="tabTradBtn" onclick="switchContractTab('trad')" type="button" class="flex-1 py-2 rounded-xl text-xs font-extrabold transition-all bg-white text-cDark shadow-sm">
+                  Model Tradisional (Design-Bid-Build)
+                </button>
+                <button id="tabEpcBtn" onclick="switchContractTab('epc')" type="button" class="flex-1 py-2 rounded-xl text-xs font-extrabold text-cMuted hover:text-cDark transition-all">
+                  Model Terintegrasi (EPC Turnkey)
+                </button>
+              </div>
+
+              <!-- Comparison Display Box -->
+              <div id="contractDisplayBox" class="p-6 rounded-2xl border border-cLine bg-cBrandSoft/60 space-y-4">
+                <!-- Content will toggle dynamically -->
+              </div>
+
+              <!-- Deep Takeaway Callout -->
+              <div class="p-4 rounded-2xl bg-cBrandSoft border border-cBrandLight text-xs text-cDark flex items-start gap-3">
+                <span class="material-symbols-outlined text-cBrand text-xl shrink-0 mt-0.5">verified_user</span>
+                <div>
+                  <span class="font-extrabold text-cBrand">Intisari Engineer Rian:</span>
+                  <p class="mt-0.5 text-cDark/85 leading-relaxed">
+                    Dalam EPC, tidak ada istilah "salah gambar konsultan" atau "salah pasang kontraktor". Semua beban integrasi berada di pundak kontraktor EPC (<strong class="font-bold text-cBrand">Single Point of Responsibility</strong>). Itulah kenapa reputasi dan kapabilitas engineering PT PP sangat diandalkan di proyek nasional.
+                  </p>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 3:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-6">
+              <div class="flex items-center gap-2 text-xs font-mono font-bold text-cBrand uppercase tracking-wider">
+                <span class="material-symbols-outlined text-base">architecture</span>
+                Slide 3 · Pilar 1: Engineering (E)
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-cDark">
+                Dari Sketsa FEED hingga Detail Engineering Design (DED)
+              </h2>
+              <p class="text-xs sm:text-sm text-cMuted leading-relaxed">
+                Engineering adalah otak matematis proyek. Di fase ini, kesalahan 1 cm bisa mengakibatkan tabrakan pipa (<em>clash</em>) berbiaya miliaran rupiah di lapangan.
+              </p>
+
+              <!-- In-Slide Interactive Character Demonstrator Card -->
+              <div class="bg-gradient-to-r from-cDark to-slate-900 rounded-2xl p-5 text-white border border-cBrand/40 shadow-lift flex flex-col md:flex-row items-center gap-5">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-xl bg-cDarkCard border border-cBrandLight/40 p-1 shrink-0 overflow-hidden relative shadow-inner">
+                  <video autoplay loop muted playsinline class="w-full h-full object-cover object-top rounded-lg">
+                    <source src="assets/rian_tablet_loop.mp4" type="video/mp4" />
+                    <img src="assets/rian_engineer.png" alt="Rian Demonstrating" class="w-full h-full object-cover object-top" />
+                  </video>
+                  <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-cBrand/90 text-[9px] font-mono font-bold text-white">Live Demo</span>
+                </div>
+                <div class="space-y-1.5 text-center md:text-left">
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-cBrand/30 text-cBrandLight text-[10px] font-mono font-bold border border-cBrand/40">
+                    <span class="material-symbols-outlined text-xs">laptop_chromebook</span> Demonstrasi Insinyur Rian
+                  </div>
+                  <h4 class="text-sm sm:text-base font-extrabold text-white">"Saya sedang memvalidasi Digital Twin & P&ID di Tablet Lapangan"</h4>
+                  <p class="text-xs text-slate-300 leading-relaxed max-w-xl">
+                    "Sebelum pipa difabrikasi, kami melakukan simulasi 3D BIM Clash Detection secara live. Klik 3 tombol hotspot di bawah untuk melihat apa yang sedang saya periksa di layar tablet!"
+                  </p>
+                </div>
+              </div>
+
+              <!-- Interactive Blueprint Canvas -->
+              <div class="relative bg-cDark rounded-2xl p-6 sm:p-8 text-white border border-cBrand/30 overflow-hidden shadow-inner">
+                <!-- Blueprint Grid Overlay -->
+                <div class="absolute inset-0 bg-[linear-gradient(to_right,#2a2e36_1px,transparent_1px),linear-gradient(to_bottom,#2a2e36_1px,transparent_1px)] bg-[size:24px_24px] opacity-40 pointer-events-none"></div>
+
+                <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div class="space-y-3 max-w-sm">
+                    <span class="px-2.5 py-1 rounded bg-cBrand/30 text-sky-300 font-mono text-[10px] font-bold uppercase tracking-wider border border-cBrand/40">
+                      BIM 3D Model Explorer
+                    </span>
+                    <h3 class="text-lg font-bold text-white">Digital Twin & Piping Layout</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                      Klik hotspot di bawah untuk memeriksa parameter desain multi-disiplin:
+                    </p>
+                  </div>
+
+                  <!-- Hotspot Area -->
+                  <div class="flex flex-wrap md:flex-col gap-3">
+                    <button onclick="inspectHotspot(1)" type="button" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-slate-800/90 hover:bg-cBrand border border-white/20 text-xs font-bold text-left transition shadow-sm">
+                      <span class="w-6 h-6 rounded-full bg-sky-500 text-white flex items-center justify-center font-mono text-xs">1</span>
+                      <span>P&ID (Piping & Instrumentation)</span>
+                    </button>
+                    <button onclick="inspectHotspot(2)" type="button" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-slate-800/90 hover:bg-amber-600 border border-white/20 text-xs font-bold text-left transition shadow-sm">
+                      <span class="w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center font-mono text-xs">2</span>
+                      <span>Clash Detection 3D BIM</span>
+                    </button>
+                    <button onclick="inspectHotspot(3)" type="button" class="flex items-center gap-3 px-4 py-2.5 rounded-xl bg-slate-800/90 hover:bg-emerald-600 border border-white/20 text-xs font-bold text-left transition shadow-sm">
+                      <span class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center font-mono text-xs">3</span>
+                      <span>Equipment Data Sheets</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Hotspot Detail Modal / Display -->
+                <div id="hotspotDisplay" class="relative z-10 mt-6 pt-4 border-t border-slate-700 text-xs text-slate-300">
+                  <div class="italic text-slate-400">Pilih salah satu hotspot di atas untuk membaca spesifikasinya...</div>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 4:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-6">
+              <div class="flex items-center gap-2 text-xs font-mono font-bold text-cBrand uppercase tracking-wider">
+                <span class="material-symbols-outlined text-base">local_shipping</span>
+                Slide 4 · Pilar 2: Procurement (P)
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-cDark">
+                Rantai Pasok Raksasa & Long Lead Items (LLI)
+              </h2>
+              <p class="text-xs sm:text-sm text-cMuted leading-relaxed">
+                Di proyek EPC, pengadaan bukan sekadar belanja toko. Komponen seperti turbin generator butuh 12–18 bulan masa fabrikasi di Eropa/Jepang. Uji intuisi logistik Anda dengan memasukkan material berikut ke kategori yang benar:
+              </p>
+
+              <!-- Interactive Drag & Drop / Click Priority Game -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+                
+                <!-- Zone A: Long Lead Items -->
+                <div class="p-5 rounded-2xl border-2 border-dashed border-cBrand/60 bg-cBrandSoft/60 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-extrabold uppercase font-mono text-cBrand">Wadah 1: Long Lead Items (LLI)</span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cBrandLight text-cDark font-bold">Harus Pesan Day-1</span>
+                  </div>
+                  <div id="zoneLLI" class="min-h-[120px] bg-white rounded-xl p-3 border border-cLine space-y-2">
+                    <!-- Dropped items -->
+                  </div>
+                </div>
+
+                <!-- Zone B: Standard / Local Items -->
+                <div class="p-5 rounded-2xl border-2 border-dashed border-cLine bg-white space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-extrabold uppercase font-mono text-cMuted">Wadah 2: Standard & Material Lokal</span>
+                    <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-cDark font-bold">Pesan Menjelang Site</span>
+                  </div>
+                  <div id="zoneStandard" class="min-h-[120px] bg-cBase rounded-xl p-3 border border-cLine space-y-2">
+                    <!-- Dropped items -->
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Available Unassigned Items -->
+              <div class="space-y-2 pt-2">
+                <div class="text-xs font-bold text-cDark">Pilih kartu material di bawah untuk memasukkan ke wadah yang tepat:</div>
+                <div id="unassignedItemsContainer" class="flex flex-wrap gap-2">
+                  <!-- Generated via script -->
+                </div>
+              </div>
+
+              <!-- Status Feedback -->
+              <div id="procurementFeedback" class="p-3 rounded-xl bg-slate-100 text-xs font-mono text-slate-700 flex items-center justify-between">
+                <span>Status: Sortir seluruh 4 kartu material di atas.</span>
+                <span id="procurementScore" class="font-bold text-cBrand">0/4 Terpasang</span>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 5:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-6">
+              <div class="flex items-center gap-2 text-xs font-mono font-bold text-cBrand uppercase tracking-wider">
+                <span class="material-symbols-outlined text-base">foundation</span>
+                Slide 5 · Pilar 3: Construction (C)
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-cDark">
+                Pelaksanaan Fisik: Erection & Heavy Lifting di Lapangan
+              </h2>
+              <p class="text-xs sm:text-sm text-cMuted leading-relaxed">
+                Di lapangan, desain dan material disatukan oleh ribuan pekerja dan ratusan subkontraktor di bawah pengawasan ketat tim site engineer.
+              </p>
+
+              <!-- In-Slide Character Site Patrol Card -->
+              <div class="bg-gradient-to-r from-cDark to-slate-900 rounded-2xl p-5 text-white border border-cBrand/40 shadow-lift flex flex-col md:flex-row items-center gap-5">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-xl bg-cDarkCard border border-cBrandLight/40 p-1 shrink-0 overflow-hidden relative shadow-inner">
+                  <video autoplay loop muted playsinline class="w-full h-full object-cover object-top rounded-lg">
+                    <source src="assets/rian_walk_loop.mp4" type="video/mp4" />
+                    <img src="assets/rian_engineer.png" alt="Rian Site Walk" class="w-full h-full object-cover object-top" />
+                  </video>
+                  <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-cAccent text-[9px] font-mono font-bold text-white">Site Patrol</span>
+                </div>
+                <div class="space-y-1.5 text-center md:text-left">
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-cBrand/30 text-cBrandLight text-[10px] font-mono font-bold border border-cBrand/40">
+                    <span class="material-symbols-outlined text-xs">directions_walk</span> Site Inspection Insinyur Rian
+                  </div>
+                  <h4 class="text-sm sm:text-base font-extrabold text-white">"Saya sedang berpatroli memantau proses Heavy Lifting & Ereksi"</h4>
+                  <p class="text-xs text-slate-300 leading-relaxed max-w-xl">
+                    "Setiap pergerakan alat berat dan pemasangan struktur baja wajib memenuhi toleransi milimeter. Pelajari 3 tahapan konstruksi fisik di bawah ini:"
+                  </p>
+                </div>
+              </div>
+
+              <!-- Stepper Control -->
+              <div class="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-slate-100 border border-cLine">
+                <button onclick="setConstructionStep(1)" id="step1Btn" type="button" class="flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-extrabold bg-white text-cBrand shadow-sm transition">
+                  1. Civil & Deep Foundation
+                </button>
+                <button onclick="setConstructionStep(2)" id="step2Btn" type="button" class="flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-extrabold text-cMuted hover:text-cDark transition">
+                  2. Heavy Erection & Steel Structure
+                </button>
+                <button onclick="setConstructionStep(3)" id="step3Btn" type="button" class="flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-extrabold text-cMuted hover:text-cDark transition">
+                  3. Piping, Cabling & Loop Test
+                </button>
+              </div>
+
+              <!-- Step Visual Content Card -->
+              <div id="constructionStepContent" class="p-6 rounded-2xl border border-cLine bg-slate-50 space-y-3">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          `;
+          break;
+
+        case 6:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-6">
+              <div class="flex items-center gap-2 text-xs font-mono font-bold text-amber-600 uppercase tracking-wider">
+                <span class="material-symbols-outlined text-base">health_and_safety</span>
+                Slide 6 · Budaya K3 & Zero Harm
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-cDark">
+                Keselamatan Kerja Tanpa Kompromi di Proyek PT PP
+              </h2>
+              <p class="text-xs sm:text-sm text-cMuted leading-relaxed">
+                Target kami di setiap site EPC adalah <strong class="font-bold text-cDark">Zero Accident</strong>. Setiap pekerja dilindungi oleh sistem Permit to Work (PTW) dan Job Safety Analysis (JSA).
+              </p>
+
+              <!-- In-Slide Safety Demonstrator Card -->
+              <div class="bg-gradient-to-r from-cDark to-slate-900 rounded-2xl p-5 text-white border border-emerald-500/40 shadow-lift flex flex-col md:flex-row items-center gap-5">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-xl bg-cDarkCard border border-emerald-400/40 p-1 shrink-0 overflow-hidden relative shadow-inner">
+                  <video autoplay loop muted playsinline class="w-full h-full object-cover object-top rounded-lg">
+                    <source src="assets/rian_thumbs_loop.mp4" type="video/mp4" />
+                    <img src="assets/rian_engineer.png" alt="Rian Safety Officer" class="w-full h-full object-cover object-top" />
+                  </video>
+                  <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-emerald-500 text-[9px] font-mono font-bold text-white">Zero Harm</span>
+                </div>
+                <div class="space-y-1.5 text-center md:text-left">
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold border border-emerald-500/40">
+                    <span class="material-symbols-outlined text-xs">verified_user</span> Safety Stance Insinyur Rian
+                  </div>
+                  <h4 class="text-sm sm:text-base font-extrabold text-white">"Tidak Ada Pekerjaan yang Begitu Penting Hingga Mengabaikan Keselamatan!"</h4>
+                  <p class="text-xs text-slate-300 leading-relaxed max-w-xl">
+                    "Gunakan wewenang <em>Stop Work Authority</em> jika Anda melihat kondisi tidak aman. Periksa 3 skenario bahaya kritis di bawah ini:"
+                  </p>
+                </div>
+              </div>
+
+              <!-- Spot The Hazard Checklist -->
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                
+                <div onclick="toggleSafetyCheck(1, this)" class="p-5 rounded-2xl border-2 border-cLine bg-white hover:border-cBrand cursor-pointer transition space-y-2 select-none">
+                  <div class="flex items-center justify-between">
+                    <span class="material-symbols-outlined text-2xl text-amber-500">warning</span>
+                    <span id="safetyStatus1" class="text-xs font-mono font-bold text-slate-400">Belum Dicek</span>
+                  </div>
+                  <h4 class="text-xs font-extrabold text-cDark">Bekerja di Ketinggian 15 Meter</h4>
+                  <p class="text-[11px] text-cMuted leading-relaxed">
+                    Pekerja memasang balok baja tanpa mengaitkan hook Double Lanyard Full Body Harness ke lifeline.
+                  </p>
+                  <div class="text-[10px] font-mono font-bold text-rose-600 pt-1">Tindakan: Stop Work Authority!</div>
+                </div>
+
+                <div onclick="toggleSafetyCheck(2, this)" class="p-5 rounded-2xl border-2 border-cLine bg-white hover:border-cBrand cursor-pointer transition space-y-2 select-none">
+                  <div class="flex items-center justify-between">
+                    <span class="material-symbols-outlined text-2xl text-amber-500">flash_on</span>
+                    <span id="safetyStatus2" class="text-xs font-mono font-bold text-slate-400">Belum Dicek</span>
+                  </div>
+                  <h4 class="text-xs font-extrabold text-cDark">Pekerjaan Ruang Terbatas (Confined Space)</h4>
+                  <p class="text-[11px] text-cMuted leading-relaxed">
+                    Pengelasan di dalam bejana tanpa blower ventilasi udara dan belum ada uji gas analyzer oksigen.
+                  </p>
+                  <div class="text-[10px] font-mono font-bold text-rose-600 pt-1">Tindakan: Wajib Izin Gas Test!</div>
+                </div>
+
+                <div onclick="toggleSafetyCheck(3, this)" class="p-5 rounded-2xl border-2 border-cLine bg-white hover:border-cBrand cursor-pointer transition space-y-2 select-none">
+                  <div class="flex items-center justify-between">
+                    <span class="material-symbols-outlined text-2xl text-amber-500">emergency</span>
+                    <span id="safetyStatus3" class="text-xs font-mono font-bold text-slate-400">Belum Dicek</span>
+                  </div>
+                  <h4 class="text-xs font-extrabold text-cDark">Heavy Lifting Radius 20 Meter</h4>
+                  <p class="text-[11px] text-cMuted leading-relaxed">
+                    Crawler Crane 250 Ton sedang mengangkat beban, namun area swing crane belum dipasang barikade safety.
+                  </p>
+                  <div class="text-[10px] font-mono font-bold text-rose-600 pt-1">Tindakan: Pasang Red Barricade!</div>
+                </div>
+
+              </div>
+
+              <!-- Safety Feedback -->
+              <div id="safetySummaryBox" class="p-4 rounded-2xl bg-slate-50 border border-cLine text-xs text-cMuted flex items-center justify-between">
+                <span>Klik ketiga skenario bahaya di atas untuk mengaktifkan audit keselamatan.</span>
+                <span id="safetyProgressText" class="font-mono font-bold text-cBrand">0/3 Terverifikasi</span>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 7:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-6">
+              <div class="flex items-center gap-2 text-xs font-mono font-bold text-cBrand uppercase tracking-wider">
+                <span class="material-symbols-outlined text-base">power</span>
+                Slide 7 · Commissioning & COD
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-cDark">
+                Uji Fungsi, Performance Guarantee, dan Serah Terima COD
+              </h2>
+              <p class="text-xs sm:text-sm text-cMuted leading-relaxed">
+                Gedung berdiri bukan berarti proyek selesai. Fasilitas harus diuji dingin (Cold), diuji panas (Hot), hingga lolos Performance Guarantee Test (PGT). Geser tuas kesiapan di bawah untuk melihat tahapan COD:
+              </p>
+
+              <!-- Interactive Commissioning Slider -->
+              <div class="p-6 rounded-2xl border border-cLine bg-slate-50 space-y-5">
+                <div class="space-y-2">
+                  <div class="flex justify-between items-center text-xs font-bold font-mono text-cDark">
+                    <span>Level Kesiapan Uji Fungsi:</span>
+                    <span id="commStagePercent" class="text-sm text-cBrand font-extrabold">25% (Cold Commissioning)</span>
+                  </div>
+                  <input id="commRangeSlider" oninput="updateCommissioningStage(this.value)" type="range" min="1" max="4" value="1" step="1" class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-cBrand" />
+                  <div class="flex justify-between text-[10px] font-mono text-cMuted px-1">
+                    <span>1. Cold Comm</span>
+                    <span>2. Hot Comm</span>
+                    <span>3. PGT Trial</span>
+                    <span>4. Handover (COD)</span>
+                  </div>
+                </div>
+
+                <!-- Dynamic Commissioning Detail Container -->
+                <div id="commDetailContainer" class="p-5 bg-white rounded-xl border border-cLine shadow-sm space-y-2">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 8:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-6">
+              <div class="flex items-center gap-2 text-xs font-mono font-bold text-rose-600 uppercase tracking-wider">
+                <span class="material-symbols-outlined text-base">crisis_alert</span>
+                Slide 8 · Simulasi Mitigasi Risiko
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-cDark">
+                Krisis Lapangan: Badai Laut & Keterlambatan Vendor
+              </h2>
+
+              <!-- In-Slide Dilemma Facilitator Card -->
+              <div class="bg-gradient-to-r from-cDark to-slate-900 rounded-2xl p-5 text-white border border-rose-500/40 shadow-lift flex flex-col md:flex-row items-center gap-5">
+                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-xl bg-cDarkCard border border-rose-400/40 p-1 shrink-0 overflow-hidden relative shadow-inner">
+                  <video autoplay loop muted playsinline class="w-full h-full object-cover object-top rounded-lg">
+                    <source src="assets/rian_tablet_loop.mp4" type="video/mp4" />
+                    <img src="assets/rian_engineer.png" alt="Rian Analyzing Crisis" class="w-full h-full object-cover object-top" />
+                  </video>
+                  <span class="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-rose-600 text-[9px] font-mono font-bold text-white">Crisis Room</span>
+                </div>
+                <div class="space-y-1.5 text-center md:text-left">
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 text-[10px] font-mono font-bold border border-rose-500/40">
+                    <span class="material-symbols-outlined text-xs">report_problem</span> Skenario Darurat Proyek
+                  </div>
+                  <h4 class="text-sm sm:text-base font-extrabold text-white">"Kapal Kargo Pipa Utama Tertahan Badai Tropis!"</h4>
+                  <p class="text-xs text-slate-300 leading-relaxed max-w-xl">
+                    "Heavy Crane 500 Ton berbiaya Rp 60 Juta/hari sudah standby di lokasi. Sebagai penanggung jawab proyek, keputusan apa yang akan Anda ambil?"
+                  </p>
+                </div>
+              </div>
+              
+              <!-- Dilemma Story Card -->
+              <div class="p-6 rounded-2xl bg-cDark text-white border border-cBrand/40 space-y-3 shadow-inner">
+                <div class="flex items-center gap-2 text-rose-400 font-mono text-xs font-bold uppercase tracking-wider">
+                  <span class="material-symbols-outlined text-sm">warning</span> Detail Kondisi Kritis
+                </div>
+                <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                  Kapal kargo yang mengangkut pipa utama bertekanan tinggi buatan Jerman tertahan badai tropis dan dipastikan terlambat 3 minggu tiba di site. Sementara itu, Heavy Crane 500 Ton bertarif sewa Rp 60 juta/hari sudah berada di lokasi. Bila crane menganggur, kerugian membengkak!
+                </p>
+                <div class="text-xs font-mono text-cBrandLight font-bold">
+                  Sebagai Project Director EPC PT PP, apa keputusan mitigasi Anda?
+                </div>
+              </div>
+
+              <!-- 3 Interactive Choices -->
+              <div class="space-y-3 pt-2">
+                <button onclick="selectDilemmaChoice('A')" id="choiceBtnA" type="button" class="w-full text-left p-4 rounded-2xl border-2 border-cLine bg-white hover:border-cBrand transition space-y-1">
+                  <div class="font-bold text-xs sm:text-sm text-cDark">Opsi A: Hentikan Semua Pekerjaan dan Tunggu Kapal Tiba</div>
+                  <div class="text-[11px] text-cMuted">Biarkan crane menganggur di site sambil mengajukan klaim force majeure cuaca kepada pemilik proyek.</div>
+                </button>
+
+                <button onclick="selectDilemmaChoice('B')" id="choiceBtnB" type="button" class="w-full text-left p-4 rounded-2xl border-2 border-cLine bg-white hover:border-cBrand transition space-y-1">
+                  <div class="font-bold text-xs sm:text-sm text-cDark">Opsi B: Re-Sequencing & Fast-Tracking Area Lain (Rekomendasi Insinyur)</div>
+                  <div class="text-[11px] text-cMuted">Alihkan crane untuk ereksi modul struktur boiler yang pondasinya sudah matang, sembari tim procurement mengawal percepatan customs clearance di pelabuhan darurat.</div>
+                </button>
+
+                <button onclick="selectDilemmaChoice('C')" id="choiceBtnC" type="button" class="w-full text-left p-4 rounded-2xl border-2 border-cLine bg-white hover:border-cBrand transition space-y-1">
+                  <div class="font-bold text-xs sm:text-sm text-cDark">Opsi C: Beli Pipa Lokal Biasa di Pasaran Tanpa Uji Engineering</div>
+                  <div class="text-[11px] text-cMuted">Pasang pipa lokal yang ada di toko terdekat agar crane langsung bekerja tanpa mengubah jadwal.</div>
+                </button>
+              </div>
+
+              <!-- Dilemma Feedback Result -->
+              <div id="dilemmaResult" class="hidden p-5 rounded-2xl text-xs leading-relaxed"></div>
+            </div>
+          `;
+          break;
+
+        case 9:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-6">
+              <div class="flex items-center justify-between pb-4 border-b border-cLine">
+                <div>
+                  <div class="text-xs font-mono font-bold text-cBrand uppercase tracking-wider">Slide 9 · Post-Test Evaluatif</div>
+                  <h2 class="text-2xl font-extrabold text-cDark">Uji Kompetensi EPC Terintegrasi</h2>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] font-mono text-cMuted block">Passing Grade</span>
+                  <span class="text-sm font-mono font-extrabold text-cAccent">&ge; 80% (Min 4/5)</span>
+                </div>
+              </div>
+
+              <p class="text-xs sm:text-sm text-cMuted leading-relaxed">
+                Jawablah 5 soal skenario berikut ini. Setiap jawaban diverifikasi menggunakan enkripsi kriptografi SHA-256 untuk memastikan integritas penilaian kompetensi Anda.
+              </p>
+
+              <!-- Quiz Questions Form -->
+              <div id="quizContainer" class="space-y-6 pt-2">
+                <!-- Dynamically populated questions -->
+              </div>
+
+              <div class="pt-4 border-t border-cLine flex justify-end">
+                <button id="submitQuizBtn" onclick="evaluateQuiz()" type="button" class="px-6 py-2.5 rounded-xl bg-cBrand hover:bg-cBrandHover text-white font-extrabold text-xs shadow-md transition flex items-center gap-2">
+                  <span>Kirim Jawaban & Periksa Nilai</span>
+                  <span class="material-symbols-outlined text-base">task_alt</span>
+                </button>
+              </div>
+
+              <div id="quizResultBox" class="hidden p-6 rounded-2xl text-center space-y-4"></div>
+            </div>
+          `;
+          break;
+
+        case 10:
+          html = `
+            <div class="bg-white rounded-3xl border border-cLine shadow-card p-6 sm:p-10 animate-fade-enter space-y-8">
+              
+              <!-- Celebration Header with Thumbs Up Video -->
+              <div class="flex flex-col items-center text-center space-y-3 pb-6 border-b border-cLine">
+                <div class="w-32 h-32 rounded-2xl bg-gradient-to-tr from-slate-900 to-slate-800 border-2 border-emerald-500/40 p-1.5 shadow-lift overflow-hidden flex items-center justify-center relative">
+                  <video autoplay loop muted playsinline class="w-full h-full object-cover object-top rounded-xl">
+                    <source src="assets/rian_thumbs_loop.mp4" type="video/mp4" />
+                    <img src="assets/rian_engineer.png" alt="Rian Site Engineer" class="w-full h-full object-cover object-top rounded-xl" />
+                  </video>
+                  <span class="absolute top-2 right-2 p-1 rounded-full bg-emerald-500 text-white text-xs shadow">✓</span>
+                </div>
+                <h2 class="text-2xl sm:text-4xl font-extrabold text-cDark tracking-tight">
+                  Selamat! Anda Telah Menyelesaikan Kursus EPC
+                </h2>
+                <p class="text-xs sm:text-sm text-cMuted max-w-xl mx-auto leading-relaxed">
+                  Dedikasi Anda memahami 10 slide EPC membuktikan kesiapan Anda menjadi bagian dari insan pembangun yang berintegritas, presisi, dan mengutamakan keselamatan kerja.
+                </p>
+              </div>
+
+              <!-- Official Digital Certificate (A4 Landscape Print-to-PDF ready) -->
+              <div class="p-8 sm:p-12 rounded-3xl border-8 border-double border-slate-800 bg-gradient-to-b from-white via-sky-50/20 to-white shadow-lift relative overflow-hidden">
+                <!-- Subtle Watermark -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none select-none">
+                  <span class="text-9xl font-black font-mono">PT PP</span>
+                </div>
+
+                <div class="relative z-10 text-center space-y-6">
+                  <div class="flex items-center justify-between border-b-2 border-slate-800 pb-4">
+                    <div class="text-left">
+                      <div class="text-lg font-black tracking-widest text-cDark font-mono">PT PP (PERSERO) TBK</div>
+                      <div class="text-[10px] text-cMuted tracking-wider uppercase font-mono">Engineering, Procurement & Construction Division</div>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-cBrand text-white flex items-center justify-center font-mono font-bold text-lg">
+                      PP
+                    </div>
+                  </div>
+
+                  <div class="space-y-1">
+                    <span class="text-xs font-mono font-bold tracking-widest uppercase text-cBrand">Sertifikat Kelulusan Resmi</span>
+                    <h3 class="text-xl sm:text-3xl font-extrabold text-cDark">EPC FOUNDATION SPECIALIST</h3>
+                    <p class="text-xs text-cMuted">Diberikan secara terhormat kepada:</p>
+                  </div>
+
+                  <div class="py-2">
+                    <div id="certNameDisplay" class="text-xl sm:text-3xl font-black text-cDark border-b-2 border-cBrand/40 inline-block px-8 py-1">
+                      ${State.learnerName}
+                    </div>
+                  </div>
+
+                  <p class="text-xs text-cMuted max-w-md mx-auto leading-relaxed">
+                    Telah berhasil menuntaskan seluruh 10 stasiun pembelajaran mandiri: Rekayasa Desain (DED/FEED), Rantai Pasok Long Lead Items, Konstruksi Lapangan, Budaya K3 Zero Harm, hingga Commissioning & COD dengan nilai evaluasi <strong class="text-cDark font-mono" id="certScoreDisplay">${State.quizScore || 100}%</strong>.
+                  </p>
+
+                  <div class="pt-6 flex items-end justify-between text-left text-xs border-t border-slate-200">
+                    <div>
+                      <div class="text-[10px] text-cMuted font-mono">Tanggal Penerbitan:</div>
+                      <div class="font-bold text-cDark font-mono">${new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                      <div class="text-[10px] text-emerald-600 font-mono font-bold mt-1">Status: VERIFIED EPC GRADUATE</div>
+                    </div>
+
+                    <div class="text-right">
+                      <div class="w-32 h-10 border-b border-slate-400 mb-1 ml-auto flex items-end justify-center">
+                        <span class="font-serif italic text-cBrand font-bold text-sm">Rian, ST.</span>
+                      </div>
+                      <div class="font-extrabold text-cDark">Rian, ST.</div>
+                      <div class="text-[10px] text-cMuted">Site Engineer & Course Mentor</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Certificate Actions -->
+              <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                <button onclick="window.print()" type="button" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-cDark hover:bg-slate-800 text-white font-extrabold text-xs shadow-md transition flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-base">print</span>
+                  <span>Cetak / Unduh Sertifikat (A4 PDF)</span>
+                </button>
+                <button onclick="downloadCheatsheet()" type="button" class="w-full sm:w-auto px-6 py-3 rounded-xl border border-cLine bg-white hover:bg-slate-50 text-cDark font-extrabold text-xs transition flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-base">download</span>
+                  <span>Unduh EPC Executive Cheatsheet</span>
+                </button>
+              </div>
+
+            </div>
+          `;
+          break;
+      }
+
+      document.getElementById('unitContainer').innerHTML = html;
+      initUnitInteractions(unitId);
+    }
+
+    /* =========================================================
+       10. UNIT INTERACTION HANDLERS PER SLIDE
+       ========================================================= */
+    function initUnitInteractions(unitId) {
+      if (unitId === 2) {
+        switchContractTab('trad');
+      } else if (unitId === 3) {
+        inspectHotspot(1);
+      } else if (unitId === 4) {
+        renderProcurementGame();
+      } else if (unitId === 5) {
+        setConstructionStep(1);
+      } else if (unitId === 6) {
+        updateSafetyUI();
+      } else if (unitId === 7) {
+        updateCommissioningStage(1);
+      } else if (unitId === 9) {
+        renderQuiz();
+      } else if (unitId === 10) {
+        confettiCelebration();
+      }
+    }
+
+    // Slide 0: Audio Preview
+    function toggleAudioPreview() {
+      State.audioActive = true;
+      AudioEngine.updateUI(false);
+      AudioEngine.playUnit(0);
+      SoundFX.click();
+    }
+
+    // Slide 1: Card Flip
+    function flipCard(cardEl) {
+      const inner = cardEl.querySelector('.flip-inner');
+      inner.classList.toggle('rotate-y-180');
+      SoundFX.toggle();
+      State.taskSatisfied = true;
+      checkUnlockCondition();
+    }
+
+    // Slide 2: Contract Toggle
+    function switchContractTab(type) {
+      const tradBtn = document.getElementById('tabTradBtn');
+      const epcBtn = document.getElementById('tabEpcBtn');
+      const box = document.getElementById('contractDisplayBox');
+      if (!tradBtn || !box) return;
+
+      SoundFX.click();
+      State.taskSatisfied = true;
+      checkUnlockCondition();
+
+      if (type === 'trad') {
+        tradBtn.className = "flex-1 py-2 rounded-xl text-xs font-extrabold transition-all bg-white text-cDark shadow-sm";
+        epcBtn.className = "flex-1 py-2 rounded-xl text-xs font-extrabold text-cMuted hover:text-cDark transition-all";
+        box.innerHTML = `
+          <div class="space-y-3 animate-fade-enter">
+            <div class="flex items-center gap-2 text-rose-600 font-bold text-xs font-mono">
+              <span class="material-symbols-outlined text-sm">cancel</span>
+              Model Tradisional (Design - Bid - Build)
+            </div>
+            <ul class="text-xs text-cMuted space-y-2 list-disc list-inside">
+              <li><strong class="text-cDark">Tanggung Jawab Terpecah:</strong> Klien menandatangani kontrak terpisah dengan Konsultan Desain dan Kontraktor Lapangan.</li>
+              <li><strong class="text-cDark">Risiko Finger Pointing:</strong> Jika mesin tidak pas dengan fondasi sipil, kontraktor menyalahkan konsultan, konsultan menyalahkan kontraktor. Klien menanggung kerugian.</li>
+              <li><strong class="text-cDark">Variasi Biaya Tinggi (Addendum):</strong> Sering terjadi perubahan desain di tengah jalan yang memicu lonjakan biaya (<em>cost overrun</em>).</li>
+            </ul>
+          </div>
+        `;
+      } else {
+        epcBtn.className = "flex-1 py-2 rounded-xl text-xs font-extrabold transition-all bg-white text-cDark shadow-sm";
+        tradBtn.className = "flex-1 py-2 rounded-xl text-xs font-extrabold text-cMuted hover:text-cDark transition-all";
+        box.innerHTML = `
+          <div class="space-y-3 animate-fade-enter">
+            <div class="flex items-center gap-2 text-emerald-600 font-bold text-xs font-mono">
+              <span class="material-symbols-outlined text-sm">check_circle</span>
+              Model Terintegrasi (EPC Turnkey)
+            </div>
+            <ul class="text-xs text-cMuted space-y-2 list-disc list-inside">
+              <li><strong class="text-cDark">Single Point of Responsibility:</strong> Satu kontraktor utama (seperti PT PP) memegang kendali penuh dari gambar desain awal sampai kunci diserahkan.</li>
+              <li><strong class="text-cDark">Turnkey Lump Sum:</strong> Klien menerima jaminan harga pasti dan tanggal serah terima pasti tanpa repot mengurusi ribuan sengketa teknis.</li>
+              <li><strong class="text-cDark">Jaminan Kinerja Pabrik (Performance Guarantee):</strong> Kontraktor wajib membuktikan bahwa output fasilitas (misal daya MW atau barel/hari) sesuai janji kontrak sebelum serah terima.</li>
+            </ul>
+          </div>
+        `;
+      }
+    }
+
+    // Slide 3: Blueprint Hotspot
+    function inspectHotspot(num) {
+      const display = document.getElementById('hotspotDisplay');
+      if (!display) return;
+      SoundFX.click();
+      State.taskSatisfied = true;
+      checkUnlockCondition();
+
+      if (num === 1) {
+        display.innerHTML = `
+          <div class="animate-fade-enter space-y-1">
+            <span class="text-sky-400 font-bold font-mono">1. Piping & Instrumentation Diagram (P&ID):</span>
+            <p>Peta skematik aliran fluida bertekanan, katup kontrol otomatis, instrumen suhu, serta interlock sistem pengaman pabrik.</p>
+          </div>
+        `;
+      } else if (num === 2) {
+        display.innerHTML = `
+          <div class="animate-fade-enter space-y-1">
+            <span class="text-amber-400 font-bold font-mono">2. 3D BIM Clash Detection:</span>
+            <p>Simulasi digital 3 dimensi untuk mendeteksi benturan fisik antara struktur balok baja, kabel nampan (cable tray), dan jalur pipa sebelum fabrikasi dimulai.</p>
+          </div>
+        `;
+      } else {
+        display.innerHTML = `
+          <div class="animate-fade-enter space-y-1">
+            <span class="text-emerald-400 font-bold font-mono">3. Equipment Data Sheet:</span>
+            <p>Spesifikasi teknis detail (kapasitas tekanan, voltase motor, toleransi korosi) yang diserahkan tim Engineering kepada tim Procurement untuk proses tender vendor.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Slide 4: Procurement Game
+    const PROCUREMENT_ITEMS = [
+      { id: 'item1', name: "Turbin Gas 150MW Impor", type: 'lli', desc: "Fabrikasi 14 bulan di Eropa" },
+      { id: 'item2', name: "Semen Mortar & Beton Ready-Mix", type: 'standard', desc: "Batching plant lokal dekat site" },
+      { id: 'item3', name: "Boiler Drum Tekanan Tinggi", type: 'lli', desc: "Pesanan khusus bejana tekan 10 bulan" },
+      { id: 'item4', name: "Kabel Instalasi Kantor Site", type: 'standard', desc: "Supplier kabel nasional ready stock" }
+    ];
+
+    function renderProcurementGame() {
+      const container = document.getElementById('unassignedItemsContainer');
+      const zoneLLI = document.getElementById('zoneLLI');
+      const zoneStd = document.getElementById('zoneStandard');
+      if (!container || !zoneLLI || !zoneStd) return;
+
+      zoneLLI.innerHTML = '';
+      zoneStd.innerHTML = '';
+      container.innerHTML = '';
+
+      let assignedCount = 0;
+      PROCUREMENT_ITEMS.forEach(item => {
+        const target = State.procurementGame[item.id];
+        if (target === 'lli') {
+          assignedCount++;
+          zoneLLI.innerHTML += `
+            <div class="p-2 rounded-lg bg-cBrandSoft text-cBrand text-xs font-bold flex items-center justify-between border border-cBrandLight">
+              <span>${item.name}</span>
+              <button onclick="resetProcurementItem('${item.id}')" class="text-cBrand hover:text-cBrandHover text-[10px]">✕ Hapus</button>
+            </div>
+          `;
+        } else if (target === 'standard') {
+          assignedCount++;
+          zoneStd.innerHTML += `
+            <div class="p-2 rounded-lg bg-slate-100 text-cDark text-xs font-bold flex items-center justify-between border border-cLine">
+              <span>${item.name}</span>
+              <button onclick="resetProcurementItem('${item.id}')" class="text-cMuted hover:text-cDark text-[10px]">✕ Hapus</button>
+            </div>
+          `;
+        } else {
+          container.innerHTML += `
+            <div class="p-2.5 rounded-xl border border-cLine bg-white shadow-sm flex items-center gap-3">
+              <div>
+                <div class="text-xs font-bold text-cDark">${item.name}</div>
+                <div class="text-[10px] text-cMuted">${item.desc}</div>
+              </div>
+              <div class="flex items-center gap-1 ml-auto">
+                <button onclick="assignProcurementItem('${item.id}', 'lli')" type="button" class="px-2.5 py-1 rounded-lg bg-cBrand hover:bg-cBrandHover text-white font-mono text-[10px] font-bold shadow-sm transition">
+                  + Wadah LLI
+                </button>
+                <button onclick="assignProcurementItem('${item.id}', 'standard')" type="button" class="px-2.5 py-1 rounded-lg bg-slate-700 hover:bg-cDark text-white font-mono text-[10px] font-bold shadow-sm transition">
+                  + Standar
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      const scoreEl = document.getElementById('procurementScore');
+      if (scoreEl) scoreEl.textContent = `${assignedCount}/4 Terpasang`;
+
+      if (assignedCount === 4) {
+        State.taskSatisfied = true;
+        SoundFX.success();
+        checkUnlockCondition();
+      }
+    }
+
+    function assignProcurementItem(id, target) {
+      State.procurementGame[id] = target;
+      SoundFX.click();
+      renderProcurementGame();
+    }
+
+    function resetProcurementItem(id) {
+      State.procurementGame[id] = null;
+      SoundFX.click();
+      renderProcurementGame();
+    }
+
+    // Slide 5: Construction Steps
+    function setConstructionStep(step) {
+      const box = document.getElementById('constructionStepContent');
+      const b1 = document.getElementById('step1Btn');
+      const b2 = document.getElementById('step2Btn');
+      const b3 = document.getElementById('step3Btn');
+      if (!box) return;
+
+      SoundFX.click();
+      State.taskSatisfied = true;
+      checkUnlockCondition();
+
+      [b1, b2, b3].forEach(b => {
+        b.className = "flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-extrabold text-cMuted hover:text-cDark transition";
+      });
+
+      if (step === 1) {
+        b1.className = "flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-extrabold bg-white text-cBrand shadow-sm transition";
+        box.innerHTML = `
+          <div class="space-y-2 animate-fade-enter">
+            <h4 class="text-sm font-extrabold text-cDark">Tahap 1: Civil Works & Deep Foundation</h4>
+            <p class="text-xs text-cMuted leading-relaxed">
+              Pembersihan lahan (<em>clearing</em>), pemancangan tiang pancang spun / bored pile hingga kedalaman tanah keras, dan pengecoran massal (<em>mass concrete</em>) untuk fondasi peralatan berat seperti turbin dan generator.
+            </p>
+            <div class="text-[11px] font-mono text-cBrand font-semibold">Tantangan Kunci: Daya dukung tanah dan pengeringan beton bebas retak termal.</div>
+          </div>
+        `;
+      } else if (step === 2) {
+        b2.className = "flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-extrabold bg-white text-cBrand shadow-sm transition";
+        box.innerHTML = `
+          <div class="space-y-2 animate-fade-enter">
+            <h4 class="text-sm font-extrabold text-cDark">Tahap 2: Steel Structure & Heavy Lifting</h4>
+            <p class="text-xs text-cMuted leading-relaxed">
+              Ereksi ribuan ton rangka baja menggunakan crawler crane kapasitas 250 hingga 500 ton. Pengangkatan modul generator ke atas fondasi utama dengan kalkulasi lifting plan yang presisi dan aman.
+            </p>
+            <div class="text-[11px] font-mono text-amber-600 font-semibold">Tantangan Kunci: Kecepatan angin di ketinggian dan kestabilan pijakan crane (outrigger).</div>
+          </div>
+        `;
+      } else {
+        b3.className = "flex-1 min-w-[120px] py-2 px-3 rounded-xl text-xs font-extrabold bg-white text-cBrand shadow-sm transition";
+        box.innerHTML = `
+          <div class="space-y-2 animate-fade-enter">
+            <h4 class="text-sm font-extrabold text-cDark">Tahap 3: Piping Spools, Cabling & Loop Test</h4>
+            <p class="text-xs text-cMuted leading-relaxed">
+              Pengelasan sambungan pipa dengan uji Radiography NDT (Non-Destructive Testing) bebas bocor, penarikan kabel transmisi listrik, serta pengujian kontinuitas sinyal sensor instrumen ke Control Room.
+            </p>
+            <div class="text-[11px] font-mono text-emerald-600 font-semibold">Tantangan Kunci: Ketelitian sertifikasi tukang las (welder) 6G dan kalibrasi sensor.</div>
+          </div>
+        `;
+      }
+    }
+
+    // Slide 6: Safety Spot The Hazard
+    function toggleSafetyCheck(id, el) {
+      SoundFX.click();
+      if (State.safetyChecks.has(id)) {
+        State.safetyChecks.delete(id);
+      } else {
+        State.safetyChecks.add(id);
+      }
+      updateSafetyUI();
+    }
+
+    function updateSafetyUI() {
+      for (let i = 1; i <= 3; i++) {
+        const statusEl = document.getElementById(`safetyStatus${i}`);
+        if (statusEl) {
+          if (State.safetyChecks.has(i)) {
+            statusEl.textContent = "✓ Terverifikasi";
+            statusEl.className = "text-xs font-mono font-bold text-emerald-600";
+          } else {
+            statusEl.textContent = "Belum Dicek";
+            statusEl.className = "text-xs font-mono font-bold text-slate-400";
+          }
+        }
+      }
+      const pText = document.getElementById('safetyProgressText');
+      if (pText) pText.textContent = `${State.safetyChecks.size}/3 Terverifikasi`;
+
+      if (State.safetyChecks.size === 3) {
+        State.taskSatisfied = true;
+        SoundFX.success();
+        checkUnlockCondition();
+      }
+    }
+
+    // Slide 7: Commissioning Slider
+    function updateCommissioningStage(val) {
+      const stageText = document.getElementById('commStagePercent');
+      const box = document.getElementById('commDetailContainer');
+      if (!stageText || !box) return;
+
+      SoundFX.toggle();
+      State.taskSatisfied = true;
+      checkUnlockCondition();
+
+      const stages = [
+        {
+          pct: "25% - Cold Commissioning",
+          desc: "Pengujian kering tanpa media/fluida. Meliputi: uji tekanan pipa dengan air (Hydrotest), kalibrasi katup solenoid, dan tes putaran bebas motor listrik tanpa beban."
+        },
+        {
+          pct: "50% - Hot Commissioning",
+          desc: "Memasukkan fluida, uap, atau bahan bakar pertama kali ke dalam sistem pipa dan bejana. Menguji pemanasan boiler dan sinkronisasi awal panel distribusi daya listrik."
+        },
+        {
+          pct: "75% - Performance Guarantee Test (PGT)",
+          desc: "Pabrik dioperasikan pada beban penuh (100% load) selama 72 jam nonstop untuk membuktikan kapasitas produksi, konsumsi energi, dan emisi lingkungan sesuai janji kontrak."
+        },
+        {
+          pct: "100% - Commercial Operation Date (COD)",
+          desc: "Penyerahan resmi seluruh fasilitas siap pakai kepada pemilik proyek (Handover). Garansi masa pemeliharaan (Defect Liability Period) resmi dimulai."
+        }
+      ];
+
+      const s = stages[parseInt(val) - 1];
+      stageText.textContent = s.pct;
+      box.innerHTML = `
+        <div class="animate-fade-enter space-y-2">
+          <div class="text-xs font-mono font-bold text-cBrand uppercase tracking-wider">Spesifikasi Uji Fungsi:</div>
+          <p class="text-xs text-cDark leading-relaxed">${s.desc}</p>
+        </div>
+      `;
+    }
+
+    // Slide 8: Dilemma Choice
+    function selectDilemmaChoice(opt) {
+      State.dilemmaChoice = opt;
+      SoundFX.click();
+      const res = document.getElementById('dilemmaResult');
+      const bA = document.getElementById('choiceBtnA');
+      const bB = document.getElementById('choiceBtnB');
+      const bC = document.getElementById('choiceBtnC');
+      if (!res) return;
+
+      [bA, bB, bC].forEach(b => b.className = "w-full text-left p-4 rounded-2xl border-2 border-cLine bg-white transition space-y-1");
+
+      res.classList.remove('hidden');
+      if (opt === 'A') {
+        bA.className = "w-full text-left p-4 rounded-2xl border-2 border-rose-500 bg-rose-50/40 transition space-y-1";
+        res.className = "p-5 rounded-2xl text-xs leading-relaxed bg-rose-100 text-rose-950 border border-rose-200 animate-fade-enter";
+        res.innerHTML = `
+          <strong>Konsekuensi Kurang Tepat:</strong> Menghentikan pekerjaan menyebabkan biaya sewa crane membengkak Rp 1,2 Miliar selama 3 minggu. Pemilik proyek juga menolak klaim force majeure karena jadwal kritis masih bisa dimitigasi.
+        `;
+        SoundFX.error();
+      } else if (opt === 'B') {
+        bB.className = "w-full text-left p-4 rounded-2xl border-2 border-emerald-500 bg-emerald-50/40 transition space-y-1";
+        res.className = "p-5 rounded-2xl text-xs leading-relaxed bg-emerald-100 text-emerald-950 border border-emerald-200 animate-fade-enter";
+        res.innerHTML = `
+          <strong>Keputusan Sempurna (Insinyur Teladan)! 👍</strong> Melalui koordinasi terintegrasi EPC, tim Engineering merevisi urutan kerja (<em>re-sequencing</em>). Crane produktif mengangkat modul boiler lain tanpa menganggur, dan jadwal COD keseluruhan proyek berhasil diselamatkan!
+        `;
+        SoundFX.success();
+        State.taskSatisfied = true;
+        checkUnlockCondition();
+      } else {
+        bC.className = "w-full text-left p-4 rounded-2xl border-2 border-rose-500 bg-rose-50/40 transition space-y-1";
+        res.className = "p-5 rounded-2xl text-xs leading-relaxed bg-rose-100 text-rose-950 border border-rose-200 animate-fade-enter";
+        res.innerHTML = `
+          <strong>Bahaya Fatal! ✕</strong> Membeli pipa biasa tanpa spesifikasi engineering berpotensi pecah saat uji tekanan hydrotest dan bisa memicu ledakan maut. Integritas dan kepatuhan standar teknis adalah harga mati di proyek PT PP!
+        `;
+        SoundFX.error();
+      }
+    }
+
+    // Slide 9: Quiz
+    function renderQuiz() {
+      const container = document.getElementById('quizContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      QUIZ_QUESTIONS.forEach((q, idx) => {
+        let optionsHtml = '';
+        q.options.forEach((opt, optIdx) => {
+          optionsHtml += `
+            <label class="flex items-start gap-3 p-3.5 rounded-xl border border-cLine bg-white hover:bg-slate-50 cursor-pointer transition select-none">
+              <input type="radio" name="q_${idx}" value="${optIdx}" onchange="selectQuizOption(${idx}, ${optIdx})" class="mt-0.5 accent-cBrand shrink-0" />
+              <span class="text-xs text-cDark leading-relaxed">${opt}</span>
+            </label>
+          `;
+        });
+
+        container.innerHTML += `
+          <div class="p-5 rounded-2xl border border-cLine bg-slate-50/70 space-y-3" id="questionCard_${idx}">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-cBrand text-white flex items-center justify-center font-mono font-bold text-xs">
+                ${idx + 1}
+              </span>
+              <h4 class="text-xs sm:text-sm font-bold text-cDark leading-snug">${q.q}</h4>
+            </div>
+            <div class="space-y-2 pt-1">
+              ${optionsHtml}
+            </div>
+            <div id="quizFeedback_${idx}" class="hidden p-3 rounded-xl text-xs font-mono"></div>
+          </div>
+        `;
+      });
+    }
+
+    function selectQuizOption(qIdx, optIdx) {
+      State.quizAnswers[qIdx] = optIdx;
+      SoundFX.click();
+    }
+
+    async function evaluateQuiz() {
+      let correctCount = 0;
+      const SALT = "EPC_SALT_2026";
+
+      for (let i = 0; i < QUIZ_QUESTIONS.length; i++) {
+        const selected = State.quizAnswers[i];
+        const card = document.getElementById(`questionCard_${i}`);
+        const feedback = document.getElementById(`quizFeedback_${i}`);
+        if (selected === undefined) {
+          showToast("Mohon jawab seluruh 5 pertanyaan kuis sebelum mengirimkan!", "warning", true);
+          SoundFX.error();
+          return;
+        }
+
+        const candidateHash = await sha256(`${SALT}::quiz_${i}::${selected}`);
+        feedback.classList.remove('hidden');
+
+        if (candidateHash === QUIZ_QUESTIONS[i].correctHash) {
+          correctCount++;
+          feedback.className = "p-3 rounded-xl text-xs bg-emerald-100 text-emerald-900 border border-emerald-200 mt-2";
+          feedback.innerHTML = `<strong>Benar ✓</strong> ${QUIZ_QUESTIONS[i].explanation}`;
+        } else {
+          feedback.className = "p-3 rounded-xl text-xs bg-rose-100 text-rose-900 border border-rose-200 mt-2";
+          feedback.innerHTML = `<strong>Kurang Tepat ✕</strong> Jawaban Anda belum tepat. ${QUIZ_QUESTIONS[i].explanation}`;
+        }
+      }
+
+      const score = Math.round((correctCount / QUIZ_QUESTIONS.length) * 100);
+      State.quizScore = score;
+      const resultBox = document.getElementById('quizResultBox');
+      const submitBtn = document.getElementById('submitQuizBtn');
+      resultBox.classList.remove('hidden');
+
+      if (score >= COURSE_CONFIG.passingScore) {
+        SoundFX.success();
+        State.taskSatisfied = true;
+        checkUnlockCondition();
+        submitBtn.disabled = true;
+        submitBtn.className += " opacity-50 cursor-not-allowed";
+
+        resultBox.className = "p-6 rounded-2xl text-center space-y-3 bg-emerald-50 border border-emerald-200 animate-fade-enter";
+        resultBox.innerHTML = `
+          <div class="inline-flex p-3 rounded-full bg-emerald-100 text-emerald-600 mb-1">
+            <span class="material-symbols-outlined text-4xl">celebration</span>
+          </div>
+          <h3 class="text-xl font-extrabold text-emerald-950">LULUS EVALUASI AKHIR!</h3>
+          <p class="text-xs text-emerald-800">Skor Anda: <strong class="text-lg font-mono">${score}%</strong> (${correctCount} dari 5 Benar). Slide 10 Kelulusan & Sertifikat sekarang telah terbuka!</p>
+          <div class="pt-2">
+            <button onclick="navigateTo(10)" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md transition inline-flex items-center gap-2">
+              <span>Buka Sertifikat Kelulusan →</span>
+            </button>
+          </div>
+        `;
+      } else {
+        SoundFX.error();
+        resultBox.className = "p-6 rounded-2xl text-center space-y-3 bg-rose-50 border border-rose-200 animate-fade-enter";
+        resultBox.innerHTML = `
+          <div class="inline-flex p-3 rounded-full bg-rose-100 text-rose-600 mb-1">
+            <span class="material-symbols-outlined text-4xl">cancel</span>
+          </div>
+          <h3 class="text-xl font-extrabold text-rose-950">BELUM MEMENUHI PASSING GRADE</h3>
+          <p class="text-xs text-rose-800">Skor Anda: <strong class="text-lg font-mono">${score}%</strong> (Minimal 80% / 4 Benar). Silakan periksa kembali materi pada slide sebelumnya dan coba lagi.</p>
+        `;
+      }
+    }
+
+    // Slide 10: Celebration
+    function confettiCelebration() {
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      }
+    }
+
+    function downloadCheatsheet() {
+      SoundFX.click();
+      const text = `PT PP (PERSERO) TBK - EPC EXECUTIVE CHEATSHEET
+1. DEFINISI EPC: Engineering, Procurement, Construction (Turnkey Lump Sum). Single Point of Responsibility.
+2. PILAR E (ENGINEERING): FEED (Kalkulasi CAPEX & Spesifikasi Utama) -> DED (Gambar milimeter P&ID, Sipil, 3D BIM Clash Detection).
+3. PILAR P (PROCUREMENT): Long Lead Items (LLI butuh 6-18 bulan), Vendor FAT (Factory Acceptance Test), Heavy Marine Transport.
+4. PILAR C (CONSTRUCTION): Deep Foundation, Heavy Steel Erection, Radiography Welding NDT, Zero Harm K3 Culture.
+5. COMMISSIONING: Cold Comm (Hydrotest) -> Hot Comm -> Performance Guarantee Test (PGT) -> COD (Commercial Operation Date).`;
+
+      const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "EPC_Executive_Cheatsheet_PTPP.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("EPC Cheatsheet berhasil diunduh!", "download_done");
+    }
+
+    /* =========================================================
+       11. SEQUENTIAL GATING & NAVIGATION SYSTEM
+       ========================================================= */
+    function startGateTimer(seconds) {
+      if (State.timerInterval) clearInterval(State.timerInterval);
+      State.unitTimeRemaining = seconds;
+      updateTimerUI();
+
+      if (seconds <= 0 || !COURSE_CONFIG.enableGatingTimer) {
+        State.unitTimeRemaining = 0;
+        updateTimerUI();
+        checkUnlockCondition();
+        return;
+      }
+
+      State.timerInterval = setInterval(() => {
+        State.unitTimeRemaining--;
+        updateTimerUI();
+        if (State.unitTimeRemaining <= 0) {
+          clearInterval(State.timerInterval);
+          checkUnlockCondition();
+        }
+      }, 1000);
+    }
+
+    function updateTimerUI() {
+      const timerText = document.getElementById('timerText');
+      const timerContainer = document.getElementById('timerContainer');
+      if (!timerText || !timerContainer) return;
+
+      if (State.unitTimeRemaining > 0) {
+        timerContainer.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-cBase border border-cLine text-xs font-mono";
+        timerText.textContent = `Waktu membaca: ${State.unitTimeRemaining}s`;
+      } else {
+        timerContainer.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-mono text-emerald-700 font-bold";
+        timerText.innerHTML = `Materi Selesai <span class="material-symbols-outlined text-sm">check_circle</span>`;
+      }
+    }
+
+    function checkUnlockCondition() {
+      const nextBtn = document.getElementById('nextBtn');
+      const timeMet = State.unitTimeRemaining <= 0 || !COURSE_CONFIG.enableGatingTimer;
+      
+      let taskMet = true;
+      if (State.currentUnit === 4 && Object.values(State.procurementGame).filter(x => x !== null).length < 4) taskMet = false;
+      if (State.currentUnit === 6 && State.safetyChecks.size < 3) taskMet = false;
+      if (State.currentUnit === 8 && State.dilemmaChoice !== 'B') taskMet = false;
+      if (State.currentUnit === 9 && State.quizScore < COURSE_CONFIG.passingScore) taskMet = false;
+
+      if (timeMet && taskMet) {
+        State.completedUnits.add(State.currentUnit);
+        if (nextBtn) {
+          nextBtn.disabled = false;
+          nextBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        }
+        renderNavLists();
+        updateOverallProgress();
+      }
+    }
+
+    function syncSidebarVideo(unitId) {
+      const meta = UNITS_METADATA[unitId];
+      const videoEl = document.getElementById('sidebarCompanionVideo');
+      const subEl = document.getElementById('sidebarCompanionSubtitle');
+      if (subEl && meta.subtitle) subEl.textContent = meta.subtitle;
+      if (videoEl && meta.video) {
+        if (videoEl.getAttribute('data-src') !== meta.video) {
+          videoEl.setAttribute('data-src', meta.video);
+          videoEl.src = meta.video;
+          videoEl.load();
+          videoEl.play().catch(() => {});
+        }
+      }
+    }
+
+    function navigateTo(unitId) {
+      if (unitId < 0 || unitId >= COURSE_CONFIG.totalUnits) return;
+
+      if (!COURSE_CONFIG.devMode && unitId > 0 && !State.completedUnits.has(unitId - 1)) {
+        SoundFX.error();
+        showToast(`Slide ${unitId} masih terkunci! Selesaikan Slide ${unitId - 1} terlebih dahulu.`, 'lock', true);
+        return;
+      }
+
+      SoundFX.click();
+      State.currentUnit = unitId;
+      State.taskSatisfied = false;
+
+      const meta = UNITS_METADATA[unitId];
+      renderUnitContent(unitId);
+
+      // Sync Companion Character Loop Video
+      syncSidebarVideo(unitId);
+
+      // Scroll smoothly only inside the middle scrollable container
+      const scrollContainer = document.getElementById('appScrollContainer');
+      if (scrollContainer) {
+        scrollContainer.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Start gating timer
+      startGateTimer(meta.minSeconds);
+
+      // Play audio narration if enabled
+      AudioEngine.playUnit(unitId);
+
+      // Update Navigation buttons
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const nextBtnText = document.getElementById('nextBtnText');
+
+      if (prevBtn) {
+        prevBtn.style.visibility = unitId === 0 ? 'hidden' : 'visible';
+      }
+
+      if (nextBtn) {
+        if (unitId === COURSE_CONFIG.totalUnits - 1) {
+          nextBtnText.textContent = "Ulangi dari Slide 0 ↺";
+          nextBtn.disabled = false;
+          nextBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        } else {
+          nextBtnText.textContent = "Lanjut ke Slide Berikutnya";
+          nextBtn.disabled = !State.completedUnits.has(unitId);
+          if (nextBtn.disabled) {
+            nextBtn.classList.add('opacity-40', 'cursor-not-allowed');
+          } else {
+            nextBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+          }
+        }
+      }
+
+      renderNavLists();
+      updateOverallProgress();
+    }
+
+    function renderNavLists() {
+      const desktopNav = document.getElementById('desktopNav');
+      const mobileNav = document.getElementById('mobileNav');
+      if (!desktopNav || !mobileNav) return;
+
+      let navHtml = '';
+      UNITS_METADATA.forEach(u => {
+        const isCurrent = u.id === State.currentUnit;
+        const isCompleted = State.completedUnits.has(u.id);
+        const isUnlocked = isCompleted || (u.id > 0 && State.completedUnits.has(u.id - 1)) || u.id === 0 || COURSE_CONFIG.devMode;
+
+        let statusIcon = '';
+        let itemClass = '';
+
+        if (isCurrent) {
+          itemClass = "bg-cBrand text-white font-bold shadow-sm";
+          statusIcon = '<span class="material-symbols-outlined text-sm">play_arrow</span>';
+        } else if (isCompleted) {
+          itemClass = "bg-slate-50 text-slate-700 hover:bg-slate-100 font-semibold";
+          statusIcon = '<span class="material-symbols-outlined text-sm text-emerald-600">check_circle</span>';
+        } else if (isUnlocked) {
+          itemClass = "bg-white text-cMuted hover:bg-slate-50";
+          statusIcon = '<span class="material-symbols-outlined text-sm text-slate-400">radio_button_unchecked</span>';
+        } else {
+          itemClass = "opacity-40 cursor-not-allowed text-slate-400";
+          statusIcon = '<span class="material-symbols-outlined text-sm">lock</span>';
+        }
+
+        navHtml += `
+          <button onclick="navigateTo(${u.id})" type="button" class="w-full flex items-center justify-between p-2 rounded-xl text-xs text-left transition ${itemClass}">
+            <span class="truncate">${u.title}</span>
+            ${statusIcon}
+          </button>
+        `;
+      });
+
+      desktopNav.innerHTML = navHtml;
+      mobileNav.innerHTML = navHtml;
+    }
+
+    function updateOverallProgress() {
+      const pct = Math.round((State.completedUnits.size / COURSE_CONFIG.totalUnits) * 100);
+      const pText = document.getElementById('overallProgressText');
+      const pBar = document.getElementById('overallProgressBar');
+      if (pText) pText.textContent = `${pct}%`;
+      if (pBar) pBar.style.width = `${pct}%`;
+    }
+
+    /* =========================================================
+       12. EVENT LISTENERS INITIALIZATION
+       ========================================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      AudioEngine.init();
+
+      // Audio Toggle Button
+      document.getElementById('toggleAudioBtn').addEventListener('click', () => {
+        State.audioActive = !State.audioActive;
+        SoundFX.click();
+        if (State.audioActive) {
+          AudioEngine.playUnit(State.currentUnit);
+        } else {
+          AudioEngine.stop();
+        }
+      });
+
+      // Audio Replay Button
+      document.getElementById('replayAudioBtn').addEventListener('click', () => {
+        SoundFX.click();
+        AudioEngine.replay();
+      });
+
+      // Audio Speed Button
+      document.getElementById('audioSpeedBtn').addEventListener('click', () => {
+        AudioEngine.cycleSpeed();
+      });
+
+      // Navigation Prev & Next
+      document.getElementById('prevBtn').addEventListener('click', () => {
+        navigateTo(State.currentUnit - 1);
+      });
+
+      document.getElementById('nextBtn').addEventListener('click', () => {
+        if (State.currentUnit === COURSE_CONFIG.totalUnits - 1) {
+          navigateTo(0);
+        } else {
+          navigateTo(State.currentUnit + 1);
+        }
+      });
+
+      // Mobile Drawer Toggle
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+        SoundFX.click();
+        mobileDrawer.classList.remove('hidden');
+      });
+      document.getElementById('closeDrawerBtn').addEventListener('click', () => {
+        SoundFX.click();
+        mobileDrawer.classList.add('hidden');
+      });
+
+      // Keyboard Navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') {
+          const nextBtn = document.getElementById('nextBtn');
+          if (nextBtn && !nextBtn.disabled) nextBtn.click();
+        } else if (e.key === 'ArrowLeft') {
+          const prevBtn = document.getElementById('prevBtn');
+          if (prevBtn && prevBtn.style.visibility !== 'hidden') prevBtn.click();
+        }
+      });
+
+      // Initial Mount
+      navigateTo(0);
+    });
+  </script>
+</body>
+</html>

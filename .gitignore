@@ -1,0 +1,11 @@
+# Node & Temporary
+node_modules/
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# Cache & Environment
+__pycache__/
+*.pyc
+.env
